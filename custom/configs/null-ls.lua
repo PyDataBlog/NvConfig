@@ -1,33 +1,32 @@
 local null_ls = require "null-ls"
 
-local formatting = null_ls.builtins.formatting
-local lint = null_ls.builtins.diagnostics
+local b = null_ls.builtins
 
 local sources = {
-  formatting.prettier,
-  formatting.prettierd,
-  formatting.stylua,
-  formatting.black,
-  formatting.isort,
-  formatting.jq,
-  formatting.beautysh,
 
-  lint.shellcheck,
-  lint.jsonlint,
-  lint.yamllint,
+  -- webdev stuff
+  b.formatting.prettierd,
+  b.formatting.prettier.with { filetypes = { "html", "markdown", "css" } }, -- so prettier works only on these filetypes
 
-  lint.flake8.with {
-    args = {
-      "--ignore=E203,E266,E501,W503,F403,F401,E712,C901,E402,F405",
-      "--max-line-length=120",
-      "--max-complexity=18",
-      "--select=B,C,E,F,W,T4,B9",
-    },
-  },
+  -- Lua
+  b.formatting.stylua,
+
+  -- cpp
+  b.formatting.clang_format,
+
+  --python
+  b.formatting.black,
+  b.diagnostics.ruff,
+
+  --bash
+  b.diagnostics.shellcheck,
+
+  --json & yaml
+  b.diagnostics.jsonlint,
+  b.diagnostics.yamllint,
 }
 
 null_ls.setup {
   debug = true,
   sources = sources,
 }
-
